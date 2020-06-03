@@ -1,2 +1,3 @@
 # bullseye
-Bullseye game
+Bullseye game!
+Just put it on a web server and play!
