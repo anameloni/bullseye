@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <meta charset="UTF-8">
+    <hi id="counterHTML">Acertos:</hi>
+    <head>
+
+
+
+        <!--Inicio do código em JavaScript-->
+<canvas width="600" height="400"></canvas>
+</head>
+<script>
+
+    var tela = document.querySelector('canvas');
+    var pincel = tela.getContext('2d');
+    var raio = 10;
+    var xMin = 0+3*raio;
+    var yMin = 0+3*raio;
+    var xMax = 600-3*raio;
+    var yMax = 400-3*raio;
+    //Variáveis a serem descartadas posteriormente
+    var xi = geraX();
+    var yi = geraY();
+    var counter =0;
+
+    pincel.fillStyle = 'lightgray';
+    pincel.fillRect(0, 0, 600, 400);
+
+    function geraX(){  
+        return Math.round(Math.random()*xMax);// - tela.offsetLeft;
+    }
+
+    
+    function geraY(){
+        return Math.round(Math.random()*yMax);// - tela.offsetTop;
+    }
+
+    
+    function desenhaAlvo(xi,yi){
+        desenhaCirculo(xi,yi, raio + 20, 'red'); // maior círculo
+        desenhaCirculo(xi,yi, raio + 10, 'white');
+        desenhaCirculo(xi,yi, raio, 'red'); // menor circulo
+    }    
+
+    
+    function desenhaCirculo(x, y, raio, cor) {
+        pincel.fillStyle = cor;
+        pincel.beginPath();
+        pincel.arc(x, y, raio, 0, 2 * Math.PI);
+        pincel.fill();
+    }
+
+
+    tela.onclick = function (evento) {
+        var x = evento.pageX - tela.offsetLeft;
+        var y = evento.pageY - tela.offsetTop;
+
+       // lógica de acerto
+        if ((x > xi - raio && x < xi + raio)&&(y > yi-raio && y < yi +raio)) {
+            
+            alert("Você acertou!");
+            counter++;
+            updateCounter();
+            apagaAlvo();
+            //desenhaAlvo(pageX,pageY);
+            xi = geraX();
+            yi = geraY();
+        }
+    }
+
+
+    function moveAlvo(){
+        
+        apagaAlvo();
+        
+        if(xi > xMax || xi < xMin){
+            xi = geraX();
+        }
+        
+        if(yi > yMax || yi < yMin){
+            yi = geraY();
+        } 
+        
+        xi = geraX();
+        yi = geraY();
+        
+        desenhaAlvo(xi,yi);                  
+    }
+  
+
+    function apagaAlvo(){
+        pincel.fillStyle = 'lightgray';
+        pincel.beginPath();
+        pincel.fillRect(0, 0, 600, 400);
+    }
+    
+    function updateCounter(){
+        document.getElementById("counterHTML").innerHTML = "Acertos: "+counter;
+    }
+
+    //INICIO DO CODIGO
+    desenhaAlvo(xi,yi);
+    setInterval(moveAlvo,1200);
+
+</script>
+
+</html>
